@@ -1,0 +1,30 @@
+<div nz-row class="header">
+  <div nz-col nzSpan="4">
+    <p class="logo">
+      <span class="logoText" data-letters="myLove">myLove</span>
+
+    </p>
+  </div>
+  <div nz-col nzSpan="12">
+    <div class="search-div">
+
+      <nz-input-group [nzPrefix]="prefixTemplate">
+        <input type="text" class="search-in" nz-input placeholder="search" />
+      </nz-input-group>
+      <ng-template #prefixTemplate><i nz-icon type="search"></i></ng-template>
+
+
+    </div>
+  </div>
+  <div nz-col nzSpan="8" class="right">
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item title="首页"><i nz-icon type="home"></i></li>
+      <li nz-menu-item title="写博客" (click)="openAddModal()"><i nz-icon nzType="highlight" nzTheme="outline"></i></li>
+      <li nz-menu-item title="通知"><i nz-icon type="bell"></i></li>
+      <li nz-menu-item title="标签"><i nz-icon type="tag"></i></li>
+      <li nz-menu-item title="个人信息"><i nz-icon type="user"></i></li>
+      <li nz-menu-item title="退出"><i nz-icon type="logout"></i></li>
+
+    </ul>
+  </div>
+</div>
