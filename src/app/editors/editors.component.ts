@@ -12,16 +12,23 @@ import {
   forwardRef,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { $ } from "jquery";
 
 import { EditorConfig } from "../common/editor-config";
 
 declare var editormd: any;
+const UEDITOR_VALUE_ACCESSOR = {
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => EditorsComponent),
+  multi: true,
+};
+
 @Component({
   selector: "app-editors",
   templateUrl: "./editors.component.html",
   styleUrls: ["./editors.component.css"],
 })
-export class EditorsComponent implements AfterViewInit, OnDestroy, ControlValueAccessor, OnInit {
+export class EditorsComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
   @Input() editormdConfig: EditorConfig; // 配置选项
 
   // tslint:disable-next-line:no-output-on-prefix
@@ -37,12 +44,8 @@ export class EditorsComponent implements AfterViewInit, OnDestroy, ControlValueA
   private mdeditor: any;
   private value: string;
   constructor(private ngZone: NgZone) {}
-  onChange = () => {};
+  onChange = (arg) => {};
   onTouched = () => {};
-
-  ngAfterViewInit(): void {
-    this.init();
-  }
 
   ngOnDestroy(): void {
     this.destroy();
@@ -89,7 +92,7 @@ export class EditorsComponent implements AfterViewInit, OnDestroy, ControlValueA
     this.ngZone.run(() => {
       this.value = value;
 
-      // this.onChange(this.value);
+      this.onChange(this.value);
       this.onTouched();
 
       this.onValueChange.emit(this.value);
@@ -99,10 +102,10 @@ export class EditorsComponent implements AfterViewInit, OnDestroy, ControlValueA
 
   destroy() {
     if (this.mdeditor) {
-      // this.mdeditor.removeListener("ready");
-      // this.mdeditor.removeListener("contentChange");
-      this.mdeditor.editor.remove();
-      this.mdeditor.destroy();
+      //   this.mdeditor.removeListener("ready");
+      //   this.mdeditor.removeListener("contentChange");
+      //   this.mdeditor.editor.remove();
+      //   this.mdeditor.destroy();
       this.mdeditor = null;
     }
   }
@@ -115,6 +118,7 @@ export class EditorsComponent implements AfterViewInit, OnDestroy, ControlValueA
     console.log("this.mdeditor.getHTML() 1", this.mdeditor.getHTML());
     return this.mdeditor.getHTML();
   }
-
-  ngOnInit() {}
+  ngAfterViewInit(): void {
+    this.init();
+  }
 }

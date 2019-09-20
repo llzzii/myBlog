@@ -18,13 +18,41 @@
   </div>
   <div nz-col nzSpan="8" class="right">
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item title="首页"><i nz-icon type="home"></i></li>
-      <li nz-menu-item title="写博客" (click)="openAddModal()"><i nz-icon nzType="highlight" nzTheme="outline"></i></li>
-      <li nz-menu-item title="通知"><i nz-icon type="bell"></i></li>
-      <li nz-menu-item title="标签"><i nz-icon type="tag"></i></li>
-      <li nz-menu-item title="个人信息"><i nz-icon type="user"></i></li>
-      <li nz-menu-item title="退出"><i nz-icon type="logout"></i></li>
+      <li nz-menu-item title="首页" routerLink='../'><i nz-icon type="home"></i></li>
+      <li *ngIf="!islogin" nz-menu-item title="登录" (click)="login(loginfrom)"><i nz-icon type="login"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="写博客" routerLink='./add'><i nz-icon nzType="highlight"
+          nzTheme="outline"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="通知"><i nz-icon type="bell"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="标签"><i nz-icon type="tag"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="个人信息"><i nz-icon type="user"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="退出" (click)="logout()"><i nz-icon type="logout"></i></li>
 
     </ul>
   </div>
 </div>
+
+
+<ng-template #loginfrom>
+  <form nz-form [formGroup]="loginForm" class="login-form">
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group [nzPrefix]="prefixUser">
+          <input type="text" nz-input formControlName="userName" placeholder="Username" />
+        </nz-input-group>
+        <nz-form-explain *ngIf="loginForm.get('userName')?.dirty && loginForm.get('userName')?.errors">Please
+          input your username!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group [nzPrefix]="prefixLock">
+          <input type="password" nz-input formControlName="password" placeholder="Password" />
+        </nz-input-group>
+        <nz-form-explain *ngIf="loginForm.get('password')?.dirty && loginForm.get('password')?.errors">Please
+          input your Password!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
+  <ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+</ng-template>

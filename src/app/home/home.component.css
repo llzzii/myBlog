@@ -46,3 +46,15 @@ nz-header {
   max-width: 100%;
   box-shadow: 0 2px 8px #f0f1f2;
 }
+
+.collapsed {
+  float: right;
+  padding: 5px;
+}
+
+.collapsedImg {
+  position: fixed;
+  top: 70px;
+  left: 2px;
+  z-index: 200;
+}

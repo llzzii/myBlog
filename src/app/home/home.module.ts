@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { NgZorroAntdModule } from "ng-zorro-antd";
 
@@ -13,6 +14,7 @@ import { LeftAiderComponent } from "./left-aider/left-aider.component";
 import { RightAiderComponent } from "./right-aider/right-aider.component";
 
 const routes: Routes = [
+  { path: "add", component: AddComponent },
   {
     path: "",
     component: HomeComponent,
@@ -27,7 +29,16 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [HomeComponent, HeaderComponent, LeftAiderComponent, RightAiderComponent, ContentComponent, AddComponent],
-  imports: [CommonModule, RouterModule, RouterModule.forChild(routes), CommonsModule, NgZorroAntdModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    RouterModule.forChild(routes),
+    CommonsModule,
+    NgZorroAntdModule,
+  ],
   exports: [RouterModule],
   entryComponents: [AddComponent],
 })

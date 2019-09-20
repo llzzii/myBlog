@@ -1,6 +1,6 @@
 export class EditorConfig {
   public width = "100%";
-  public height = "400";
+  public height = "90%";
   public path = "assets/editor_md/lib/";
   public codeFold: true;
   public searchReplace = true;
@@ -20,7 +20,7 @@ export class EditorConfig {
   public imageUpload = true;
   public imageFormats = ["jpg", "jpeg", "gif", "png", "bmp", "webp"];
   public imageUploadURL = "";
-  autoHeight: false;
+  autoHeight: true;
   theme: "dark";
   previewTheme: "dark";
   editorTheme: "pastel-on-dark";
