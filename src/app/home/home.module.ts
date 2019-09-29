@@ -12,6 +12,8 @@ import { HeaderComponent } from "./header/header.component";
 import { HomeComponent } from "./home.component";
 import { LeftAiderComponent } from "./left-aider/left-aider.component";
 import { RightAiderComponent } from "./right-aider/right-aider.component";
+import { TypesComponent } from "./types/types.component";
+import { UsersComponent } from "./users/users.component";
 
 const routes: Routes = [
   { path: "add", component: AddComponent },
@@ -21,14 +23,28 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        children: [{ path: "con", component: ContentComponent }, { path: "", component: ContentComponent }],
+        children: [
+          { path: "user", component: UsersComponent },
+          { path: "type", component: TypesComponent },
+          { path: "con", component: ContentComponent },
+          { path: "", component: ContentComponent },
+        ],
       },
     ],
   },
 ];
 
 @NgModule({
-  declarations: [HomeComponent, HeaderComponent, LeftAiderComponent, RightAiderComponent, ContentComponent, AddComponent],
+  declarations: [
+    HomeComponent,
+    HeaderComponent,
+    LeftAiderComponent,
+    RightAiderComponent,
+    ContentComponent,
+    AddComponent,
+    TypesComponent,
+    UsersComponent,
+  ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -40,6 +56,6 @@ const routes: Routes = [
     NgZorroAntdModule,
   ],
   exports: [RouterModule],
-  entryComponents: [AddComponent],
+  entryComponents: [AddComponent, UsersComponent],
 })
 export class HomeModule {}

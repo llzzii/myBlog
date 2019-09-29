@@ -1,0 +1,66 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="username">用户名</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      {{rowdata?.user_name||"--"}}
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_nickname">
+      昵称
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input id="user_nickname" [ngModel]="rowdata?.user_nickname" formControlName="user_nickname" />
+      <nz-form-explain *ngIf="validateForm.get('user_nickname')?.dirty && validateForm.get('user_nickname')?.errors">
+        1-36个字符，只能包含中文、字母、数字和特殊字符"-""_"
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_email">
+      邮箱
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input id="user_email" [ngModel]="rowdata?.user_email" formControlName="user_email" />
+      <nz-form-explain *ngIf="validateForm.get('user_email')?.dirty && validateForm.get('user_email')?.errors">输入正确邮箱!
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_sex">性别</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-radio-group [ngModel]="rowdata?.user_sex" formControlName="user_sex" [nzButtonStyle]="'solid'">
+        <label nz-radio-button nzValue="male">男</label>
+        <label nz-radio-button nzValue="female">女</label>
+        <label nz-radio-button nzValue="secrecy">保密</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_birthday">生日</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-date-picker [ngModel]="rowdata?.user_birthday" (ngModelChange)="onChange($event)"></nz-date-picker>
+
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_telephone">电话</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input id="user_telephone" [ngModel]="rowdata?.user_telephone" formControlName="user_telephone"
+        placeholder="电话号码" />
+      <nz-form-explain *ngIf="validateForm.get('user_telephone')?.dirty && validateForm.get('user_telephone')?.errors">
+        请输入正确的电话号码
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_declaration">个性宣言</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input id="user_declaration" [ngModel]="rowdata?.user_declaration" formControlName="user_declaration"
+        placeholder="个性宣言" />
+      <nz-form-explain *ngIf="validateForm.get('user_telephone')?.dirty && validateForm.get('user_telephone')?.errors">
+        0-255个字符
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+</form>

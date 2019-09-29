@@ -1,8 +1,13 @@
 import { Component, Input, OnInit, TemplateRef } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzModalRef, NzModalService } from "ng-zorro-antd";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { NzMessageService, NzModalRef, NzModalService } from "ng-zorro-antd";
+import { Subject, Subscription } from "rxjs";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 
 import { AddComponent } from "../add/add.component";
+import { HomeService } from "../home.service";
+import { UsersComponent } from "../users/users.component";
 
 @Component({
   selector: "app-header",
@@ -12,16 +17,33 @@ import { AddComponent } from "../add/add.component";
 export class HeaderComponent implements OnInit {
   islogin = false;
   loginForm: FormGroup;
-  constructor(private modalService: NzModalService, private fb: FormBuilder) {}
+  passwordVisible = false;
+  password: string;
+  username: string;
+  isNewUser = false;
 
-  openAddModal(loginfrom): void {
+  // 防抖
+  debounceTime = 500;
+  private isUser = new Subject<any>();
+  private subscription: Subscription;
+
+  constructor(
+    private modalService: NzModalService,
+    private fb: FormBuilder,
+    private homeService: HomeService,
+    private router: Router,
+    private message: NzMessageService
+  ) {}
+
+  openUser(): void {
     const modal = this.modalService.create({
-      nzTitle: "写博客",
-      nzContent: loginfrom,
-      nzComponentParams: {},
+      nzTitle: "个人信息",
+      nzContent: UsersComponent,
+      nzComponentParams: { username: this.username },
       nzCancelText: "取消",
+      nzWidth: "800",
       nzOkText: "提交",
-      nzOnOk: (componentInstance: AddComponent) => {
+      nzOnOk: (componentInstance: UsersComponent) => {
         // return componentInstance.submitForm();
       },
     });
@@ -40,13 +62,7 @@ export class HeaderComponent implements OnInit {
       nzCancelText: "取消",
       nzOkText: "提交",
       nzOnOk: (componentInstance: AddComponent) => {
-        // return componentInstance.submitForm();
-        for (const i in this.loginForm.controls) {
-          this.loginForm.controls[i].markAsDirty();
-          this.loginForm.controls[i].updateValueAndValidity();
-        }
-        sessionStorage.setItem("isLogin", "true");
-        this.islogin = true;
+        this.submitForm();
       },
     });
 
@@ -55,6 +71,47 @@ export class HeaderComponent implements OnInit {
     // Return a result when closed
     modal.afterClose.subscribe((result) => console.log("[afterClose] The result is:", result));
   }
+  submitForm(): void {
+    let data = {};
+    for (const i in this.loginForm.controls) {
+      this.loginForm.controls[i].markAsDirty();
+      this.loginForm.controls[i].updateValueAndValidity();
+      data[i] = this.loginForm.controls[i].value;
+    }
+    this.homeService.login(data, this.isNewUser).subscribe(
+      (datas) => {
+        this.isNewUser = false;
+        if (datas.isok) {
+          let token = datas.data;
+          sessionStorage.setItem("token", token);
+          sessionStorage.setItem("isLogin", "true");
+          sessionStorage.setItem("user_name", this.username);
+          this.islogin = true;
+        } else {
+          this.message.create("error", datas.msg);
+          this.islogin = false;
+        }
+      },
+      (error) => {
+        console.log(error);
+        this.islogin = false;
+        this.isNewUser = false;
+      }
+    );
+  }
+  isUsername(event) {
+    this.isUser.next(this.username);
+  }
+
+  confirmationValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { required: true };
+    } else if (control.value !== this.loginForm.controls.user_password.value) {
+      return { confirm: true, error: true };
+    }
+    return {};
+  }
+
   logout() {
     sessionStorage.removeItem("isLogin");
     this.islogin = false;
@@ -63,9 +120,36 @@ export class HeaderComponent implements OnInit {
     if (sessionStorage.getItem("isLogin") === "true") {
       this.islogin = true;
     }
+    if (sessionStorage.getItem("user_name")) {
+      this.username = sessionStorage.getItem("user_name");
+    }
     this.loginForm = this.fb.group({
-      userName: [null, [Validators.required]],
-      password: [null, [Validators.required]],
+      user_name: [null, [Validators.required]],
+      user_password: [null, [Validators.required]],
+      user_nickname: [null],
+      checkPassword: [null, [Validators.required, this.confirmationValidator]],
     });
+
+    this.subscription = this.isUser
+      .pipe(
+        debounceTime(this.debounceTime),
+        distinctUntilChanged()
+      )
+      .subscribe((e) => {
+        let data = {};
+        data["user_name"] = e;
+        data["user_password"] = "";
+        this.homeService.login(data, false).subscribe((datas) => {
+          if (datas.data === "noUser") {
+            this.isNewUser = true;
+          } else {
+            this.isNewUser = false;
+          }
+        });
+      });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
