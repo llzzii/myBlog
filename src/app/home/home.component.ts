@@ -7,11 +7,21 @@ import { Component, OnInit } from "@angular/core";
 })
 export class HomeComponent implements OnInit {
   isCollapsed = true;
-
+  username = "";
+  isLogin = false;
   constructor() {}
 
   changeCollapsed(isC) {
     this.isCollapsed = isC;
+  }
+
+  changeLogin(username) {
+    this.username = username;
+    if (username === "" || username == null) {
+      this.isLogin = false;
+    } else {
+      this.isLogin = true;
+    }
   }
 
   ngOnInit() {
@@ -25,5 +35,4 @@ export class HomeComponent implements OnInit {
     mainHeight.style.height = leftMainHeight - 160 + "px";
   }
   // 设置页面高度
-  AfterViewChecked(): void {}
 }

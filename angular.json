@@ -28,12 +28,7 @@
               }
             ],
             "styles": ["src/theme.less", "src/styles.css", "src/assets/editor_md/css/editormd.css"],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.js",
-              "src/assets/editor_md/editormd.js",
-              "src/assets/editor_md/lib/marked.min.js",
-              "src/assets/editor_md/lib/prettify.min.js"
-            ]
+            "scripts": ["node_modules/jquery/dist/jquery.js"]
           },
           "configurations": {
             "production": {

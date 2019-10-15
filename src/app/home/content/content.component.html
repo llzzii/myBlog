@@ -1,5 +1,5 @@
-<div class="list-card" *ngFor="let item of tags">
-  <nz-card style="width: 100%;margin-top: 16px" nzHoverable="true">
+<div class="list-card" *ngFor="let data of dataList">
+  <nz-card style="width: 100%;margin-top: 16px" nzHoverable="true " (click)="goToDetail(data.blog_id)" nzSize="small">
     <nz-skeleton [nzLoading]="loading">
       <div class="blog-content">
         <aside>
@@ -8,38 +8,29 @@
 
         <section class="clearfix">
           <header>
-            <h4>新的一天开始了</h4> <span class="pullright">2018-09-11 11:11</span>
+            <h4>{{data?.blog_title}}</h4> <span
+              class="pullright">{{data?.blog_created_time| date: "y-MM-dd HH:mm:ss"}}</span>
           </header>
 
 
           <div class="content">
-            在 dalao 的 waifu-tips.js 的基础上，实现了套 API，加上了以下功能
-
-
-
-            可以切换 Live2D 模型了（暂时只有 Pio 和 Tia 酱
-
-            支持 随机换装 和 顺序换装（收集了截至目前的 Pio、Tia 全套服装
-
-
-
-            *需要根据 自身情况 进行定制，不能直接套用（其他资源文件见 打包下载
-
-            ** waifu-tips.js 的详细设置说明，和 waifu-tips.json 节点说明，见 GitHub - fghrsh/live2d_demo ReadMe
+            {{data?.blog_content}}
           </div>
-          <div class="tags"><i nz-icon nzType="tags" title="标签" nzTheme="outline"></i>
-            <nz-tag nzColor="#ff0011">js</nz-tag>
-            <nz-tag nzColor="#dd0011">vue</nz-tag>
-            <nz-tag nzColor="#cc0011">angular</nz-tag>
+          <div class="tags" *ngIf="data?.tags!=''&&data?.tags!=null&&data?.tags!=undefined"><i nz-icon nzType="tags"
+              title="标签" nzTheme="outline"></i>
+            <nz-tag [nzColor]="color.colors[i]" *ngFor="let tag of data.tags.split(',');let i=index">{{tag}}</nz-tag>
           </div>
           <footer>
-            <span><i nz-icon nzType="eye" title="查看" nzTheme="outline"></i> 100</span>
-            <span><i nz-icon nzType="like" title="喜欢" nzTheme="outline"></i> 10</span>
-            <span><i nz-icon nzType="edit" title="评论" nzTheme="outline"></i> 10</span>
+            <span><i nz-icon nzType="eye" title="查看" nzTheme="outline"></i> {{data?.blog_views||0}}</span>
+            <span><i nz-icon nzType="like" title="喜欢" nzTheme="outline"></i> {{data?.blog_like_count||0}}</span>
+            <span><i nz-icon nzType="edit" title="评论" nzTheme="outline"></i> {{data?.blog_comment_count||0}}</span>
           </footer>
         </section>
       </div>
     </nz-skeleton>
   </nz-card>
 
+</div>
+<div class="loadmore">
+  <button nz-button *ngIf="loadingMore" (click)="onLoadMore()">加载更多</button>
 </div>

@@ -6,7 +6,7 @@
     </p>
   </div>
   <div style="float: right;margin-right: 100px;line-height: 50px">
-    <button nz-button nzType="primary" (click)="submit()" [nzLoading]="isLoading">
+    <button nz-button nzType="primary" (click)="addTags()" [nzLoading]="isLoading">
       <i nz-icon nzType="check" nzTheme="outline"></i>发布文章
     </button>
     <button nz-button nzType="default" routerLink='../'>
@@ -19,8 +19,8 @@
   <form nz-form [formGroup]="addBlog" class="add-form" style="margin-top:90px;">
     <nz-form-item>
       <nz-form-control>
-        <nz-input-group [nzPrefix]="title">
-          <input type="text" nz-input formControlName="title" [(ngModel)]="title" placeholder="标题" />
+        <nz-input-group>
+          <input nz-input formControlName="title" [(ngModel)]="title" placeholder="标题" />
         </nz-input-group>
         <nz-form-explain *ngIf="addBlog.get('title')?.dirty && addBlog.get('title')?.errors">请输入文章标题!
         </nz-form-explain>
@@ -28,10 +28,10 @@
     </nz-form-item>
     <nz-form-item>
       <nz-form-control>
-        <nz-input-group [nzPrefix]="tagss">
-          <nz-select nzMode="tags" style="width: 100%;" formControlName="tagss" nzPlaceHolder="选择或创建你的文章标签"
-            [(ngModel)]="listOfTagOptions">
-            <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.label" [nzValue]="option.value">
+        <nz-input-group>
+          <nz-select nzMode="tags" style="width: 100%;" [(ngModel)]="listOfTagOptions" (ngModelChange)="updateTags()"
+            formControlName="tagss" nzPlaceHolder="选择或创建你的文章标签">
+            <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tag_name" [nzValue]="option.tag_id">
             </nz-option>
           </nz-select>
         </nz-input-group>

@@ -10,7 +10,7 @@
 }
 
 .list-card {
-  padding: 20px 50px;
+  padding: 10px 50px;
 }
 
 .blog-content {}
@@ -54,10 +54,34 @@
   margin-right: 10px;
 }
 
-.blog-content section footer {}
+.blog-content section footer {
+  line-height: 40px;
+}
 
 .blog-content footer {}
 
 .blog-content footer span {
   padding-right: 20px;
+}
+
+.content {
+  max-height: 100px;
+  overflow: hidden;
+  color: #999;
+  text-overflow: ellipsis;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 2;
+
+  overflow: hidden;
+
+  /*! autoprefixer: off */
+
+  -webkit-box-orient: vertical;
+
+}
+
+.ant-card-body {
+  padding-bottom: 10px;
 }

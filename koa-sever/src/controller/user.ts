@@ -3,10 +3,10 @@ import * as Infos from "../middleware/info";
 import * as Users from "../model/user";
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
-
+const jwt_decode = require("jwt-decode");
 // 登录
 
-export class Controller {
+export class ControllerUser {
   constructor() {}
   login = async (ctx: any) => {
     const userinfo: User = ctx.request.body;
@@ -73,10 +73,18 @@ export class Controller {
       .slice(0, 19)
       .replace("T", " ");
     userinfo["user_updated_time"] = updated_time;
+    userinfo["user_ip"] = ctx.request.ip;
     try {
       const isHasUser = await Users.login(userinfo.user_name);
       if (isHasUser.length !== 0) {
         Object.assign(isHasUser[0], userinfo);
+        if (userinfo.user_birthday !== "") {
+          userinfo["user_birthday"] = new Date(userinfo.user_birthday)
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " ");
+        }
+
         const data = await Users.updateUser(userinfo);
         if (data.affectedRows) {
           ctx.body = Infos.reqSuc("修改成功");
@@ -93,8 +101,13 @@ export class Controller {
   getUser = async (ctx: any) => {
     let params = ctx.querystring;
     let username: string = Infos.getParamsQuary("username", params);
+    if (ctx.header == null || ctx.header.authorization == null) {
+      ctx.body = Infos.reqErr("操作失败:请先登录");
+    }
+    let tokenCookie = ctx.header.authorization.split(" ")[1];
+    let token = jwt_decode(tokenCookie, "token");
     try {
-      const isHasUser = await Users.getUser(username);
+      const isHasUser = await Users.getUser(token._id);
       if (isHasUser.length === 0) {
         ctx.body = Infos.reqErr("用户不存在");
       } else {

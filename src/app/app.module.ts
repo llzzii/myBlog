@@ -1,17 +1,18 @@
 import { CommonModule, registerLocaleData } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
-import en from "@angular/common/locales/en";
-import { NgModule } from "@angular/core";
+import zh from "@angular/common/locales/zh";
+import { LOCALE_ID, NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NZ_I18N, NgZorroAntdModule, en_US } from "ng-zorro-antd";
+import * as enDateLocale from "date-fns/locale/zh_cn";
+import { NZ_DATE_LOCALE, NZ_I18N, NgZorroAntdModule, NzI18nService, zh_CN } from "ng-zorro-antd";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CommonsModule } from "./common/commons.module";
-
-registerLocaleData(en);
+import { InterceptorProvider } from "./common/httpCommon/interceptor-provider";
+registerLocaleData(zh);
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +26,7 @@ registerLocaleData(en);
     HttpClientModule,
     BrowserAnimationsModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }],
+  providers: [InterceptorProvider],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -18,9 +18,9 @@
   </div>
   <div nz-col nzSpan="8" class="right">
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item title="首页" routerLink='../'><i nz-icon type="home"></i></li>
+      <li nz-menu-item title="首页" routerLink='/home'><i nz-icon type="home"></i></li>
       <li *ngIf="!islogin" nz-menu-item title="登录" (click)="login(loginfrom)"><i nz-icon type="login"></i></li>
-      <li *ngIf="islogin" nz-menu-item title="写博客" routerLink='./add'><i nz-icon nzType="highlight"
+      <li *ngIf="islogin" nz-menu-item title="写博客" routerLink='/home/add'><i nz-icon nzType="highlight"
           nzTheme="outline"></i></li>
       <li *ngIf="islogin" nz-menu-item title="通知"><i nz-icon type="bell"></i></li>
       <li *ngIf="islogin" nz-menu-item title="标签"><i nz-icon type="tag"></i></li>

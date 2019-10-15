@@ -1,7 +1,7 @@
 <div class="user-info">
-  <img src="../../../assets/user/nan.jpg" />
-  <h2>MerLin</h2>
-  <p>咸鱼一条</p>
+  <img [src]="userImgUrl" />
+  <h2>{{username}}</h2>
+  <p>{{user_des}}</p>
 </div>
 
 <div class="list">
@@ -9,7 +9,7 @@
   <nz-list [nzDataSource]="data" nzBordered="false" nzSplit="false" [nzRenderItem]="item" nzSize="small"
     [nzItemLayout]="'horizontal'" [nzLoading]="loading">
     <ng-template #item let-item>
-      <nz-list-item [nzContent]="item.title"></nz-list-item>
+      <nz-list-item routerLink="/home/detail/{{item.blog_id}}" [nzContent]="item.blog_title"></nz-list-item>
     </ng-template>
 
   </nz-list>
@@ -17,6 +17,6 @@
 <div class="list">
   <div class="title"><span>标签</span></div>
   <div class="tags">
-    <nz-tag *ngFor="let data of tagDatas" [nzColor]="data.color">{{data.tag}}</nz-tag>
+    <nz-tag style="margin: 3px" *ngFor="let data of tagDatas" [nzColor]="data.color">{{data.tag}}</nz-tag>
   </div>
 </div>

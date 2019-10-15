@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, TemplateRef } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { NzMessageService, NzModalRef, NzModalService } from "ng-zorro-antd";
 import { Subject, Subscription } from "rxjs";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 
+import { CommunicationService } from "../../common/communication.service";
 import { AddComponent } from "../add/add.component";
 import { HomeService } from "../home.service";
 import { UsersComponent } from "../users/users.component";
@@ -15,6 +16,8 @@ import { UsersComponent } from "../users/users.component";
   styleUrls: ["./header.component.css"],
 })
 export class HeaderComponent implements OnInit {
+  @Output() changeLogin = new EventEmitter();
+  @ViewChild("loginfrom") loginfromCom;
   islogin = false;
   loginForm: FormGroup;
   passwordVisible = false;
@@ -32,7 +35,8 @@ export class HeaderComponent implements OnInit {
     private fb: FormBuilder,
     private homeService: HomeService,
     private router: Router,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private communicationService: CommunicationService
   ) {}
 
   openUser(): void {
@@ -44,7 +48,7 @@ export class HeaderComponent implements OnInit {
       nzWidth: "800",
       nzOkText: "提交",
       nzOnOk: (componentInstance: UsersComponent) => {
-        // return componentInstance.submitForm();
+        return componentInstance.submitForm();
       },
     });
 
@@ -54,7 +58,7 @@ export class HeaderComponent implements OnInit {
     modal.afterClose.subscribe((result) => console.log("[afterClose] The result is:", result));
   }
 
-  login(loginfrom) {
+  login(loginfrom = this.loginfromCom) {
     const modal = this.modalService.create({
       nzTitle: "登录/注册",
       nzContent: loginfrom,
@@ -87,6 +91,10 @@ export class HeaderComponent implements OnInit {
           sessionStorage.setItem("isLogin", "true");
           sessionStorage.setItem("user_name", this.username);
           this.islogin = true;
+
+          this.communicationService.islogin = true;
+          this.communicationService.username = this.username;
+          this.changeLogin.emit(this.username);
         } else {
           this.message.create("error", datas.msg);
           this.islogin = false;
@@ -114,7 +122,12 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     sessionStorage.removeItem("isLogin");
+    sessionStorage.removeItem("user_name");
+    sessionStorage.removeItem("token");
     this.islogin = false;
+    this.communicationService.islogin = false;
+    this.communicationService.username = "";
+    this.changeLogin.emit("");
   }
   ngOnInit() {
     if (sessionStorage.getItem("isLogin") === "true") {
@@ -122,6 +135,7 @@ export class HeaderComponent implements OnInit {
     }
     if (sessionStorage.getItem("user_name")) {
       this.username = sessionStorage.getItem("user_name");
+      this.changeLogin.emit(this.username);
     }
     this.loginForm = this.fb.group({
       user_name: [null, [Validators.required]],

@@ -4,10 +4,10 @@ import { User } from "../entity/index";
 export const login = (user_name: string) => {
   return sql.query(`SELECT * FROM users WHERE user_name='${user_name}'`);
 };
-export const getUser = (user_name: string) => {
+export const getUser = (user_id: string) => {
   return sql.query(
-    `SELECT user_name,user_sex,user_telephone,user_imgurl,user_nickname,user_birthday,user_declaration
-     FROM users WHERE user_name='${user_name}'`
+    `SELECT user_name,user_sex,user_telephone,user_imgurl,user_nickname,user_birthday,user_declaration,user_email
+     FROM users WHERE user_id='${user_id}'`
   );
 };
 export const createUser = (userinfo: User) => {
@@ -32,6 +32,6 @@ export const updateUser = (userinfo: User) => {
     user_imgurl='${userinfo.user_imgurl}',user_ip='${userinfo.user_ip}',
     user_nickname='${userinfo.user_nickname}',user_email='${userinfo.user_email}',
    user_birthday='${userinfo.user_birthday}',
-    user_updated_time='${userinfo.user_created_time}' WHERE user_name=${userinfo.user_name}`
+    user_updated_time='${userinfo.user_updated_time}' WHERE user_name='${userinfo.user_name}'`
   );
 };

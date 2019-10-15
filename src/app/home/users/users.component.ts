@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzMessageService } from "ng-zorro-antd";
+import { NzI18nService, NzMessageService, zh_CN } from "ng-zorro-antd";
 
 import { User } from "../../entity";
 import { HomeService } from "../home.service";
@@ -15,7 +15,12 @@ export class UsersComponent implements OnInit {
   rowdata: User;
   @Output() createSucceed = new EventEmitter();
   @Input() username;
-  constructor(private fb: FormBuilder, private message: NzMessageService, private homeService: HomeService) {}
+  constructor(
+    private fb: FormBuilder,
+    private message: NzMessageService,
+    private homeService: HomeService,
+    private i18n: NzI18nService
+  ) {}
 
   submitForm(): boolean {
     let data = {};
@@ -45,23 +50,29 @@ export class UsersComponent implements OnInit {
       }
     );
   }
-
+  changeLanguage(): void {
+    this.i18n.setLocale(zh_CN);
+  }
   getUserDetail() {
     this.homeService.getUser(this.username).subscribe((datas) => {
       this.rowdata = datas.data[0];
+      this.validateForm = this.fb.group({
+        user_sex: [this.rowdata.user_sex],
+        user_imgurl: [this.rowdata.user_imgurl],
+        user_nickname: [
+          this.rowdata.user_nickname,
+          [Validators.pattern("^[\u4e00-\u9fa5A-Za-z0-9-_]+$"), Validators.maxLength(36)],
+        ],
+        user_email: [this.rowdata.user_email, [Validators.email]],
+        user_birthday: [this.rowdata.user_birthday],
+        user_telephone: [this.rowdata.user_telephone, [Validators.pattern("^1[3456789]\\d{9}$")]],
+        user_declaration: [this.rowdata.user_declaration, [Validators.maxLength(255)]],
+      });
     });
   }
 
   ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      user_sex: [null],
-      user_imgurl: [null],
-      user_nickname: [null, [Validators.pattern("^[\u4e00-\u9fa5A-Za-z0-9-_]+$"), Validators.maxLength(36)]],
-      user_email: [null, [Validators.email]],
-      user_birthday: [null],
-      user_telephone: [null, [Validators.pattern("^1[3456789]\\d{9}$")]],
-      user_declaration: [null, [Validators.maxLength(255)]],
-    });
     this.getUserDetail();
+    this.changeLanguage();
   }
 }

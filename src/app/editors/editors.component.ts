@@ -96,7 +96,7 @@ export class EditorsComponent implements AfterViewInit, OnDestroy, ControlValueA
       this.onTouched();
 
       this.onValueChange.emit(this.value);
-      this.getHtmlValue.emit({ originalEvent: event, value: this.getHtmlContent() });
+      this.getHtmlValue.emit({ originalEvent: event, value: this.getMarkContent() });
     });
   }
 
