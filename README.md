@@ -1,27 +1,52 @@
-# MyBlog
+myBlog 应用是使用 angular7 + koa2 +mysql 开发的
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.2.
+##### 目的
 
-## Development server
+主要为了练习一下 angular 编写及项目引入各插件时的过程，使用 koa2 开发主要为了熟悉一下 ts 及 js 的一些转换语法
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+##### 主要功能
 
-## Code scaffolding
+1. 首页
+2. 个人信息
+3. 新增博客
+4. 查看博客
+5.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+##### 未完成功能
 
-## Build
+1. 标签管理
+2. 头像上传功能
+3. 全局搜索
+4. 关注及评论通知
+5. 赞数量、文章查看数量、关注数量统计等
+6. ……
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+##### 关键代码
 
-## Running unit tests
+###### 公共插件引入：
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- 小狗插件
+- 面板娘插接件
+- editor.md
+- 标签块随机颜色
 
-## Running end-to-end tests
+###### 首页主要功能：
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+1. 获取登录用户信息（未登录则默认为游客）
+2. 获取最新文章列表 （前 5 条）
+3. 获取标签列表
+4. 获取所有文章列表（每次 10 条，点击加载更多获取下一页数据）
+5. 登录
+6. 个人信息（查看与编辑）
 
-## Further help
+###### 添加博客
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- 标签选择（输入可添加没有的标签）
+- MarkDown 格式博客编写
+
+###### 博客查看
+
+- 解析 MarkDown 格式文章
+- 加载目录
+- 加载评论
+- 点赞信息

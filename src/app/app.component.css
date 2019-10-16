@@ -11,3 +11,10 @@ app-home {
   top: 0;
   z-index: 20;
 }
+
+.fix2 {
+  position: fixed;
+  bottom: 4px;
+  right: 0;
+  z-index: 200;
+}
