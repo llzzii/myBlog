@@ -3,13 +3,15 @@
 /**
  * Module dependencies.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+const config_1 = require("./config");
 let app = require("../app");
 let debug = require("debug")("demo:server");
 let http = require("http");
 /**
  * Get port from environment and store in Express.
  */
-let port = normalizePort(process.env.PORT || "3000");
+let port = normalizePort(config_1.config.port || "3000");
 // app.set('port', port);
 /**
  * Create HTTP server.
@@ -69,4 +71,3 @@ function onListening() {
     let bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
     debug("Listening on " + bind);
 }
-//# sourceMappingURL=index.js.map

@@ -29,9 +29,12 @@ export const updateUser = (userinfo: User) => {
     `UPDATE users  SET user_declaration='${userinfo.user_declaration}',
     user_sex='${userinfo.user_sex}',
     user_telephone='${userinfo.user_telephone}',
-    user_imgurl='${userinfo.user_imgurl}',user_ip='${userinfo.user_ip}',
+   user_ip='${userinfo.user_ip}',
     user_nickname='${userinfo.user_nickname}',user_email='${userinfo.user_email}',
    user_birthday='${userinfo.user_birthday}',
     user_updated_time='${userinfo.user_updated_time}' WHERE user_name='${userinfo.user_name}'`
   );
+};
+export const updateUserImg = (user_id: string, user_imgurl: string) => {
+  return sql.query(`UPDATE users  SET  user_imgurl='${user_imgurl}' WHERE user_id='${user_id}'`);
 };

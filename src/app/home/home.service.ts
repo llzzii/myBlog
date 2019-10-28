@@ -22,11 +22,11 @@ export class HomeService {
     return this.http.post(url, JSON.stringify(data), httpOptions).pipe(tap((response) => response));
   }
   getUser(username = ""): Observable<any> {
-    let url = "/api/getUser?username=" + username;
+    let url = "/api/user/getUser?username=" + username;
     return this.http.get(url).pipe(tap((response) => response));
   }
   getTags(): Observable<any> {
-    let url = "/api/getTags";
+    let url = "/api/user/getTags";
     return this.http.get(url).pipe(tap((response) => response));
   }
   addTag(tag): Observable<any> {

@@ -45,6 +45,22 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_imgurl">头像</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-upload nzAction="/api/updateImage" nzListType="picture-card" [(nzFileList)]="fileList"
+          [nzShowButton]="fileList.length < 1" [nzShowUploadList]="showUploadList" [nzPreview]="handlePreview">
+          <i nz-icon nzType="plus"></i>
+          <div class="ant-upload-text">Upload</div>
+        </nz-upload>
+        <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+          (nzOnCancel)="previewVisible = false">
+          <ng-template #modalContent>
+            <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+          </ng-template>
+        </nz-modal>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="user_telephone">电话</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
         <input nz-input id="user_telephone" formControlName="user_telephone" placeholder="电话号码" />

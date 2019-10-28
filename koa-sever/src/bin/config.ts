@@ -3,7 +3,7 @@ import * as mysql from "mysql";
 const co_mysql = require("co-mysql");
 
 export const config: any = {
-  port: 3004,
+  port: 8080,
   db: {
     database: "blogs",
     user: "root",

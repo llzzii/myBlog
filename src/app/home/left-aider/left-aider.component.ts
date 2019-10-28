@@ -4,6 +4,7 @@ import { COLORS } from "../../common/color";
 import { CommunicationService } from "../../common/communication.service";
 import { ResponseData } from "../../entity";
 import { HomeService } from "../home.service";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-left-aider",
@@ -56,7 +57,7 @@ export class LeftAiderComponent implements OnInit {
         if (datas.isok) {
           this.username = datas.data[0].user_nickname || datas.data[0].user_name;
           this.user_des = datas.data[0].user_declaration || "咸鱼一条";
-          this.userImgUrl = datas.data[0].user_imgurl || "../../../assets/user/nan.jpg";
+          this.userImgUrl = environment.serviceApi + "images/" + datas.data[0].user_imgurl || "../../../assets/user/nan.jpg";
         }
       });
     }

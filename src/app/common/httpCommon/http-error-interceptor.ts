@@ -108,6 +108,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                   nzOnOk: () => {
                     sessionStorage.removeItem("isLogin");
                     sessionStorage.removeItem("user_name");
+                    sessionStorage.removeItem("token");
                     window.location.reload();
                   },
                   nzCancelText: null,

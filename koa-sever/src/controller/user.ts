@@ -4,6 +4,8 @@ import * as Users from "../model/user";
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
 const jwt_decode = require("jwt-decode");
+const fs = require("fs");
+let path = require("path");
 // 登录
 
 export class ControllerUser {
@@ -35,7 +37,7 @@ export class ControllerUser {
     } catch (err) {
       ctx.body = Infos.reqErr("操作失败:" + err);
     }
-  }
+  };
   createUser = async (ctx: any) => {
     let userinfo: User = new User();
     Object.assign(userinfo, ctx.request.body);
@@ -64,7 +66,7 @@ export class ControllerUser {
     } catch (err) {
       ctx.body = Infos.reqErr("操作失败:" + err);
     }
-  }
+  };
   updateUser = async (ctx: any) => {
     let userinfo: User = new User();
     Object.assign(userinfo, ctx.request.body);
@@ -97,7 +99,48 @@ export class ControllerUser {
     } catch (err) {
       ctx.body = Infos.reqErr("操作失败:" + err);
     }
-  }
+  };
+  updateImage = async (ctx: any) => {
+    if (ctx.header == null || ctx.header.authorization == null) {
+      ctx.body = Infos.reqErr("操作失败:请先登录");
+    }
+    let tokenCookie = ctx.header.authorization.split(" ")[1];
+    let token = jwt_decode(tokenCookie, "token");
+    try {
+      const datas = await Users.getUser(token._id);
+      if (datas && datas.length > 0) {
+        let imgurl = datas[0]["user_imgurl"];
+        fs.unlink(path.join(__dirname, "../static/images/") + imgurl, (err: any) => {
+          if (err) {
+            console.log(`文件: ${imgurl} 删除失败！`);
+          } else {
+            console.log(`文件: ${imgurl} 删除成功！`);
+          }
+        });
+      }
+    } catch (err) {}
+
+    const file = ctx.request.files.file; // 获取上传文件
+    // 创建可读流
+    const reader = fs.createReadStream(file.path);
+    let namee = `${token._id}${file.name}`;
+    let filePath = path.join(__dirname, "../static/images/") + namee;
+    // 创建可写流
+    const upStream = fs.createWriteStream(filePath);
+    // 可读流通过管道写入可写流
+    reader.pipe(upStream);
+
+    try {
+      const data = await Users.updateUserImg(token._id, namee);
+      if (data.affectedRows) {
+        ctx.body = Infos.reqSuc("修改成功", filePath);
+      } else {
+        ctx.body = Infos.reqErr("修改失败");
+      }
+    } catch (err) {
+      ctx.body = Infos.reqErr("操作失败:" + err);
+    }
+  };
   getUser = async (ctx: any) => {
     let params = ctx.querystring;
     let username: string = Infos.getParamsQuary("username", params);
@@ -116,5 +159,5 @@ export class ControllerUser {
     } catch (err) {
       ctx.body = Infos.reqErr("操作失败:" + err);
     }
-  }
+  };
 }

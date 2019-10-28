@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzI18nService, NzMessageService, zh_CN } from "ng-zorro-antd";
+import { NzI18nService, NzMessageService, UploadFile, zh_CN } from "ng-zorro-antd";
 
+import { environment } from "../../../environments/environment";
 import { User } from "../../entity";
 import { HomeService } from "../home.service";
-
 @Component({
   selector: "app-users",
   templateUrl: "./users.component.html",
@@ -15,6 +15,16 @@ export class UsersComponent implements OnInit {
   rowdata: User;
   @Output() createSucceed = new EventEmitter();
   @Input() username;
+
+  showUploadList = {
+    showPreviewIcon: true,
+    showRemoveIcon: true,
+    hidePreviewIconInNonImage: true,
+  };
+  fileList = [];
+  previewImage: string | undefined = "";
+  previewVisible = false;
+
   constructor(
     private fb: FormBuilder,
     private message: NzMessageService,
@@ -36,13 +46,17 @@ export class UsersComponent implements OnInit {
     this.update(data);
     return true;
   }
+  handlePreview = (file: UploadFile) => {
+    this.previewImage = file.url || file.thumbUrl;
+    this.previewVisible = true;
+  }
 
   update(data) {
     const mid = this.message.loading("正在修改中", { nzDuration: 0 }).messageId;
     this.homeService.updateUser(data).subscribe(
       (respose) => {
         this.createSucceed.emit();
-        this.message.create(`${respose.isok === 1 ? "success" : "error"}`, `${respose.msg}`);
+        this.message.create(`${respose.isok === true ? "success" : "error"}`, `${respose.msg}`);
         this.message.remove(mid);
       },
       (error) => {
@@ -58,7 +72,6 @@ export class UsersComponent implements OnInit {
       this.rowdata = datas.data[0];
       this.validateForm = this.fb.group({
         user_sex: [this.rowdata.user_sex],
-        user_imgurl: [this.rowdata.user_imgurl],
         user_nickname: [
           this.rowdata.user_nickname,
           [Validators.pattern("^[\u4e00-\u9fa5A-Za-z0-9-_]+$"), Validators.maxLength(36)],
@@ -68,6 +81,14 @@ export class UsersComponent implements OnInit {
         user_telephone: [this.rowdata.user_telephone, [Validators.pattern("^1[3456789]\\d{9}$")]],
         user_declaration: [this.rowdata.user_declaration, [Validators.maxLength(255)]],
       });
+      if (this.rowdata.user_imgurl && this.rowdata.user_imgurl !== "") {
+        this.fileList = [
+          {
+            status: "done",
+            url: environment.serviceApi + "images/" + this.rowdata.user_imgurl,
+          },
+        ];
+      }
     });
   }
 
