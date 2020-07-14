@@ -1,0 +1,26 @@
+version: "2"
+services:
+  mysql:
+    network_mode: "host"
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_USER: "test"
+      MYSQL_PASS: "123456"
+    image: "docker.io/mysql:5.7.21"
+    restart: always
+    volumes:
+      - "/mysql/db:/var/lib/mysql"
+      - "/mysql/conf/my.cnf:/etc/my.cnf"
+      - "/mysql/init:/docker-entrypoint-initdb.d/"
+  my-blog:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    ports:
+      - "9090:80"
+  blog-server:
+    build:
+      context: .
+      dockerfile: ./service/Dockerfile
+    ports:
+      - "3000:3000"

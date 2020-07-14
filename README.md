@@ -50,3 +50,14 @@ myBlog 应用是使用 angular7 + koa2 +mysql 开发的
 - 加载目录
 - 加载评论
 - 点赞信息
+
+### 部署
+
+- 执行 `npm run build` 生成 dist 文件夹，将`Dockerfile 与 default.conf` 放入 dist 文件内
+- 在 `koa-sever` 文件内执行 tsc 生成后台 dist 文件，将`Dockerfile 与 package.json` 放入 dist 文件内
+- 创建 docker-compose.yml 文件 部署 mysql 与 web 与 server
+- 在服务器中安装 docker 及 docker-compose
+- 在 根目录创建文件夹 blog ，上传 web 的 dist 的文件夹到 blog 内，并改名为 web
+- 上传 sever 的 dist 的文件夹到 blog 内，并改名为 service
+- 上传 docker-compose.yml 至 blog 文件夹内
+- 执行 docker-compose up -d 生成 mysql 及 web、sever 镜像并运行
