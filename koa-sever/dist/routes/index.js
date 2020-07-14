@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Routers = require("koa-router");
 const blogs_1 = require("../controller/blogs");
+const file_1 = require("../controller/file");
 const user_1 = require("../controller/user");
 exports.router = new Routers();
 const controllerUser = new user_1.ControllerUser();
@@ -10,9 +11,10 @@ const controllerBlog = new blogs_1.ControllerBlog();
 exports.router.post("/api/user/login", controllerUser.login);
 exports.router.post("/api/createUser", controllerUser.createUser);
 exports.router.post("/api/updateUser", controllerUser.updateUser);
-exports.router.get("/api/getUser", controllerUser.getUser);
+exports.router.post("/api/updateImage", controllerUser.updateImage);
+exports.router.get("/api/user/getUser", controllerUser.getUser);
 // 标签
-exports.router.get("/api/getTags", controllerBlog.getTags);
+exports.router.get("/api/user/getTags", controllerBlog.getTags);
 exports.router.post("/api/addTag", controllerBlog.addTag);
 // 博文
 exports.router.post("/api/addBlog", controllerBlog.addBlog);
@@ -24,3 +26,5 @@ exports.router.post("/api/addComment", controllerBlog.addComment);
 exports.router.post("/api/addLiker", controllerBlog.addLiker);
 exports.router.get("/api/user/getComment", controllerBlog.getComment);
 exports.router.delete("/api/deleteLiker", controllerBlog.deleteLiker);
+// 静态资源服务器
+exports.router.get(/^\/images/, file_1.getFiles);
